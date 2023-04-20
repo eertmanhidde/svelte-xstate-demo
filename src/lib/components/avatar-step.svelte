@@ -4,19 +4,18 @@
   import { profanityService }  from '$lib/machines/profanity-machine';
 
   export let send;
+  export let state;
 
   let dropArea;
   let input;
-  let uploadedFileName = '';
   let uploadedFileBase64 = '';
 
     async function handleChange(e) {
-      profanityService.send({type: 'CHECK'})
       const file = e.target.files[0];
       const base64 = await convertBase64(file)
       var fileName = file.name;
       uploadedFileBase64 = base64;
-      uploadedFileName = fileName;
+      profanityService.send({type: 'CHECK', value: base64 })
     };
 
 
@@ -44,17 +43,15 @@
 </script>
 
 <section>
-  {JSON.stringify($profanityService.value)}
   <h1>Avatar plz(no not the blue one!)</h1>
   <p>With profanity filter, so no nudes please</p>
-    <div class="container">
-  <div class="card">
-    <h3>Upload Avatar</h3>
-    <div bind:this={dropArea} class="drop_box">
-        {#if uploadedFileName && uploadedFileBase64 && $profanityService.matches('success')}
-          <h4><b>{uploadedFileName}</b></h4>
-          <img src={uploadedFileBase64} width="100" alt="no clue what this is" />
-        {:else if $profanityService.matches('checking')}
+  <div class="container">
+    <div class="card">
+      <h3>Upload Avatar</h3>
+      <div bind:this={dropArea} class="drop_box">
+        {#if state.context.avatar && $profanityService.matches('success')}
+          <img src={state.context.avatar} width="100" alt="no clue what this is" />
+          {:else if $profanityService.matches('checking')}
           loading...
         {:else}
           <header>
@@ -67,13 +64,12 @@
         {#if $profanityService.matches('failure')}
           <p style="color: red;">Something went wrong please attempt again!</p>
         {/if}
+      </div>
     </div>
-
   </div>
-</div>
 
-    <br>
-    <br>
+  <br>
+  <br>
 
   <div>
     <button on:click={() => send({type: 'PREV'})}>Previous</button>

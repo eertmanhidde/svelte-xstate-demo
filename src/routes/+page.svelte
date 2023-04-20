@@ -10,10 +10,9 @@
   }
 </script>
 
+<marquee>Creating an Untapped account</marquee>
 
-<main>
-  <marquee>Creating an Untapped account</marquee>
-
+<main style="max-width: 500px; margin: 0 auto;">
   {#if $formService.matches('name')}
     <NameStep state={$formService} send={formService.send} />
   {/if}
@@ -29,13 +28,13 @@
   {#if $formService.matches('final')}
     <h1>Thanks for signing up!</h1>
     <dl>
-     <dt><b>Name</b></dt>
-     <dd>{$formService.context.name}</dd>
-     <dt><b>Age</b></dt>
-     <dd>{$formService.context.age}</dd>
-     <dt><b>avatar</b></dt>
-     <dd>
-        <img src={$formService.context.avatar} alt="idk">
+      <dt><b>Name</b></dt>
+      <dd>{$formService.context.name}</dd>
+      <dt><b>Age</b></dt>
+      <dd>{$formService.context.age}</dd>
+      <dt><b>avatar</b></dt>
+      <dd>
+        <img width="200" src={$formService.context.avatar} alt="idk">
       </dd>
     </dl>
   {/if}

@@ -1,14 +1,14 @@
-    import { browser } from '$app/environment';
+import { browser } from '$app/environment';
 import { inspect } from '@xstate/inspect';
 
-    if (browser) {
+if (browser) {
 
-inspect({
-  // options
-  // url: 'https://stately.ai/viz?inspect', // (default)
-  iframe: false // open in new window
-});
-    }
+  inspect({
+    // options
+    // url: 'https://stately.ai/viz?inspect', // (default)
+    iframe: false // open in new window
+  });
+}
 import { createMachine, interpret } from 'xstate';
 
 function randomIntFromInterval(min, max) { // min and max included
@@ -16,7 +16,10 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 // this will fail randomly
-function validateAvatar() {
+function validateAvatar(base64Image) {
+
+  // Do something with image
+  console.log(base64Image);
 
   return new Promise((resolve, reject) => {
     const rndInt = randomIntFromInterval(0, 10)
@@ -39,7 +42,7 @@ const profanityMachine = createMachine({
     checking: {
       invoke: {
         id: 'checker',
-        src: () => validateAvatar,
+        src: (_, event) => validateAvatar(event.value),
         onDone: {
           target: 'success'
         },
@@ -48,7 +51,9 @@ const profanityMachine = createMachine({
         },
       },
     },
-    success: {},
+    success: {
+      type: 'final',
+    },
     failure: {},
   },
   on: {
